@@ -1,6 +1,6 @@
 package dariomorgrane.alfa.web.client.feign.adapter;
 
-import dariomorgrane.alfa.exception.ClientLayerException;
+import dariomorgrane.alfa.exception.WebClientLayerException;
 import dariomorgrane.alfa.web.client.GifClient;
 import dariomorgrane.alfa.web.client.feign.GifFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,14 +57,14 @@ public class GifFeignClientAdapter implements GifClient {
         return getGifUrl(brokeGifQuery);
     }
 
-    private String getGifUrl(String brokeGifQuery) {
+    private String getGifUrl(String gifQuery) {
         try {
             int offset = random.nextInt(gifRandomBound);
-            Map<String, Object> fullRespondJsonMap = client.findGif(apiKey, brokeGifQuery, limit, offset, gifLang);
+            Map<String, Object> fullRespondJsonMap = client.findGif(apiKey, gifQuery, limit, offset, gifLang);
             String gifUrl = extractOriginalGifUrl(fullRespondJsonMap);
             return gifUrl;
         } catch (Exception e) {
-            throw new ClientLayerException(e.getMessage());
+            throw new WebClientLayerException(e.getMessage());
         }
     }
 

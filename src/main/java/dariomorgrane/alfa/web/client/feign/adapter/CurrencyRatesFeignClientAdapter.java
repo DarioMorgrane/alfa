@@ -1,12 +1,13 @@
 package dariomorgrane.alfa.web.client.feign.adapter;
 
-import dariomorgrane.alfa.exception.ClientLayerException;
+import dariomorgrane.alfa.exception.WebClientLayerException;
 import dariomorgrane.alfa.web.client.CurrencyRatesClient;
 import dariomorgrane.alfa.web.client.feign.CurrencyRatesFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class CurrencyRatesFeignClientAdapter implements CurrencyRatesClient {
             Map<String, Object> respondJson = client.getTodayRates(appId, baseCurrency);
             return (Map<String, Double>) respondJson.get(nameOfRatesKey);
         } catch (Exception e) {
-            throw new ClientLayerException(e.getMessage());
+            throw new WebClientLayerException(e.getMessage());
         }
     }
 
@@ -50,7 +51,7 @@ public class CurrencyRatesFeignClientAdapter implements CurrencyRatesClient {
             Map<String, Object> respondJson = client.getYesterdayRates(yesterdayRatesPath, appId, baseCurrency);
             return (Map<String, Double>) respondJson.get(nameOfRatesKey);
         } catch (Exception e) {
-            throw new ClientLayerException(e.getMessage());
+            throw new WebClientLayerException(e.getMessage());
         }
     }
 

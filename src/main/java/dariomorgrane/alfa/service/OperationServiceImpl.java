@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class OperationServiceImpl implements OperationService {
 
-    private final CurrencyRatesClient ratesClient;
-    private final GifClient gifClient;
+    private final CurrencyRatesClient ratesWebClient;
+    private final GifClient gifWebClient;
 
     @Value("${base-currency}")
     private String baseCurrency;
 
     @Autowired
-    public OperationServiceImpl(CurrencyRatesClient ratesClient, GifClient gifClient) {
-        this.ratesClient = ratesClient;
-        this.gifClient = gifClient;
+    public OperationServiceImpl(CurrencyRatesClient ratesWebClient, GifClient gifWebClient) {
+        this.ratesWebClient = ratesWebClient;
+        this.gifWebClient = gifWebClient;
     }
 
     @Override
@@ -32,16 +32,16 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public void setupRatesData(Operation operation) {
-        Double todayOperatingCurrencyRate = ratesClient.getTodayRatesMap().get(operation.getOperatingCurrencyCode());
+        Double todayOperatingCurrencyRate = ratesWebClient.getTodayRatesMap().get(operation.getOperatingCurrencyCode());
         operation.setTodayOperatingCurrencyRate(todayOperatingCurrencyRate);
-        Double yesterdayOperatingCurrencyRate = ratesClient.getYesterdayRatesMap().get(operation.getOperatingCurrencyCode());
+        Double yesterdayOperatingCurrencyRate = ratesWebClient.getYesterdayRatesMap().get(operation.getOperatingCurrencyCode());
         operation.setYesterdayOperatingCurrencyRate(yesterdayOperatingCurrencyRate);
-        operation.setRateGoneUp(operation.getTodayOperatingCurrencyRate() >= operation.getYesterdayOperatingCurrencyRate());
+        operation.setRateGoneUp(operation.getTodayOperatingCurrencyRate() > operation.getYesterdayOperatingCurrencyRate());
     }
 
     @Override
     public void setupGifData(Operation operation) {
-        operation.setGifUrl(operation.getRateGoneUp() ? gifClient.getRichGifUrl() : gifClient.getBrokeGifUrl());
+        operation.setGifUrl(operation.getRateGoneUp() ? gifWebClient.getRichGifUrl() : gifWebClient.getBrokeGifUrl());
     }
 
 }

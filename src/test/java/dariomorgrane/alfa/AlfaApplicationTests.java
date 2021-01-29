@@ -56,9 +56,6 @@ class AlfaApplicationTests {
     @Value("${gif-data-key}")
     String dataKey;
 
-    private Operation expectedOperation;
-    private Operation expectedRichOperation;
-
     private final String brockGifUrl = "broke gif url";
     private final String richGifUrl = "rich gif url";
 
@@ -93,13 +90,12 @@ class AlfaApplicationTests {
     }
 
 
-
     Operation generateExpectedOperationObject(String operatingCurrencyCode,
                                               double todayOperatingCurrencyRate,
                                               double yesterdayOperatingCurrencyRate,
                                               boolean rateGoneUp,
                                               String gifUrl) {
-        expectedOperation = new Operation();
+        Operation expectedOperation = new Operation();
         expectedOperation.setBaseCurrencyCode(baseCurrency);
         expectedOperation.setOperatingCurrencyCode(operatingCurrencyCode);
         expectedOperation.setTodayOperatingCurrencyRate(todayOperatingCurrencyRate);

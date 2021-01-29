@@ -93,4 +93,5 @@ public class Operation {
                 rateGoneUp,
                 gifUrl);
     }
+
 }
