@@ -3,8 +3,12 @@ package dariomorgrane.alfa.web.client.feign.adapter;
 import dariomorgrane.alfa.exception.WebClientLayerException;
 import dariomorgrane.alfa.web.client.GifClient;
 import dariomorgrane.alfa.web.client.feign.GifFeignClient;
+import dariomorgrane.alfa.web.client.feign.adapter.params.GifClientParamsMap;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,10 +16,9 @@ import java.util.Map;
 import java.util.Random;
 
 @Component
-public class GifFeignClientAdapter implements GifClient {
+public class GifFeignClientAdapter implements GifClient, ApplicationContextAware {
 
-    @Value("${gif-api-key}")
-    private String apiKey;
+    private ApplicationContext applicationContext;
 
     @Value("${rich-gif-query}")
     private String richGifQuery;
@@ -23,8 +26,8 @@ public class GifFeignClientAdapter implements GifClient {
     @Value("${broke-gif-query}")
     private String brokeGifQuery;
 
-    @Value("${gif-lang}")
-    private String gifLang;
+    @Value("${search-endpoint}")
+    private String searchEndpoint;
 
     @Value("${gif-data-key}")
     private String gifDataKey;
@@ -38,13 +41,17 @@ public class GifFeignClientAdapter implements GifClient {
     @Value("${gif-random-bound}")
     private Integer gifRandomBound;
 
-    private final int limit = 1;
     private final Random random = new Random();
     private final GifFeignClient client;
 
     @Autowired
     public GifFeignClientAdapter(GifFeignClient client) {
         this.client = client;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -59,8 +66,10 @@ public class GifFeignClientAdapter implements GifClient {
 
     private String getGifUrl(String gifQuery) {
         try {
-            int offset = random.nextInt(gifRandomBound);
-            Map<String, Object> fullRespondJsonMap = client.findGif(apiKey, gifQuery, limit, offset, gifLang);
+            GifClientParamsMap params = applicationContext.getBean("gifClientParamsMap", GifClientParamsMap.class);
+            params.setOffset(Integer.toString(random.nextInt(gifRandomBound)));
+            params.setQuery(gifQuery);
+            Map<String, Object> fullRespondJsonMap = client.findGif(searchEndpoint, params);
             String gifUrl = extractOriginalGifUrl(fullRespondJsonMap);
             return gifUrl;
         } catch (Exception e) {

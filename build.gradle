@@ -16,6 +16,7 @@ dependencies {
 	implementation platform('org.springframework.cloud:spring-cloud-dependencies:2020.0.0')
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

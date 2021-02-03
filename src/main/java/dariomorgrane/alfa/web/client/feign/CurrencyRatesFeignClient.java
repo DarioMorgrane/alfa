@@ -11,13 +11,10 @@ import java.util.Map;
 public interface CurrencyRatesFeignClient {
 
     @GetMapping(value = "/${today-rates-path}")
-    Map<String, Object> getTodayRates(@RequestParam("app_id") String appId,
-                                      @RequestParam("base") String base);
+    Map<String, Object> getTodayRates(@RequestParam Map<String, String> params);
 
     @GetMapping(value = "/${historical-rates-path}" + "/{yesterdayRatesPath}")
     Map<String, Object> getYesterdayRates(@PathVariable("yesterdayRatesPath") String yesterdayRatesPath,
-                                          @RequestParam("app_id") String app_id,
-                                          @RequestParam("base") String base);
-
+                                          @RequestParam Map<String, String> params);
 
 }

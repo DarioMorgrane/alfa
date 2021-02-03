@@ -13,19 +13,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class OperationController {
 
     private final OperationService service;
-    private Operation operation;
 
     public OperationController(OperationService service) {
         this.service = service;
     }
 
-    public Operation getOperation() {
-        return operation;
-    }
-
     @GetMapping("/operate")
     public ModelAndView processOperation(@RequestParam("code") String currencyCode) {
-        operation = service.setupInitialData(currencyCode);
+        Operation operation = service.setupInitialData(currencyCode);
         service.setupRatesData(operation);
         service.setupGifData(operation);
         return new ModelAndView("redirect:" + operation.getGifUrl());

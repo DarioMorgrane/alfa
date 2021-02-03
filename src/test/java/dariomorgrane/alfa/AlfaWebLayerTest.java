@@ -50,7 +50,9 @@ public class AlfaWebLayerTest {
 
     @Test
     public void shouldReturnStatusFoundAndExpectedLocation() throws Exception {
-        mockMvc.perform(get(operationControllerUrlExample)).andDo(print()).andExpect(status().isFound())
+        mockMvc.perform(get(operationControllerUrlExample))
+                .andDo(print())
+                .andExpect(status().isFound())
                 .andExpect(header().string("Location", gifLink));
     }
 
